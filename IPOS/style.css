@@ -1,0 +1,172 @@
+ body {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #ff8a00 0%, #e52e71 100%);
+      min-height: 100vh;
+      color: #fff;
+      padding: 0;
+    }
+    .container {
+      max-width: 960px;
+      margin: 40px auto;
+      background: rgba(0,0,0,0.5);
+      border-radius: 22px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+      padding: 32px 24px;
+    }
+    h1 {
+      font-size: 2.6em;
+      text-align: center;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-bottom: 14px;
+      text-shadow: 2px 2px 10px #e52e71;
+    }
+    .score-timer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.35em;
+      margin-bottom: 26px;
+      font-weight: 600;
+      visibility: hidden;
+    }
+    .score-timer.active {
+      visibility: visible;
+      animation: fadein 0.8s;
+    }
+    .score-animate {
+      animation: pop 0.45s;
+    }
+    .timer-animate {
+      animation: shake 0.7s;
+    }
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.25); color: #ffd600;}
+      100% { transform: scale(1); }
+    }
+    @keyframes shake {
+      0% { transform: translateX(0);}
+      25% { transform: translateX(-6px);}
+      50% { transform: translateX(6px);}
+      75% { transform: translateX(-6px);}
+      100% { transform: translateX(0);}
+    }
+    p {
+      font-size: 1.1em;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .component {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.component-name {
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 28px 0 18px 0;
+  letter-spacing: 1px;
+  color: #ffd600;
+  text-shadow: 2px 2px 10px #e52e71;
+      background: linear-gradient(90deg,#232526 0%,#414345 100%);
+      border-radius: 16px;
+      box-shadow: 0 6px 22px rgba(229,46,113,0.18);
+      padding: 18px 24px;
+      animation: fadein 0.7s;
+      margin-top: 10px;
+    }
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .component img {
+  width: 260px;
+  height: 260px;
+  object-fit: contain;
+  border-radius: 18px;
+  background: #fff;
+  border: 3px solid #ff8a00;
+  box-shadow: 0 4px 24px #e52e71a3;
+  transition: transform 0.2s;
+    }
+    .component img:hover {
+      transform: scale(1.12) rotate(-5deg);
+      box-shadow: 0 4px 24px #e52e71d8;
+    }
+    .btn, .game-btn {
+      margin: 8px 7px 0 0;
+      padding: 10px 30px;
+      border-radius: 40px;
+      border: none;
+      background: linear-gradient(90deg,#ff8a00 0%, #e52e71 100%);
+      color: #fff;
+      font-size: 1.18em;
+      font-weight: 600;
+      box-shadow: 0 3px 10px rgba(229,46,113,0.12);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.18s;
+      outline: none;
+      margin-bottom: 10px;
+    }
+    .btn:active, .game-btn:active {
+      animation: btnbounce 0.24s;
+      box-shadow: 0 2px 16px #ffd600a3;
+      transform: scale(1.11);
+    }
+    @keyframes btnbounce {
+      0% { transform: scale(1);}
+      60% { transform: scale(1.19);}
+      100% { transform: scale(1);}
+    }
+    #result {
+      margin-top: 24px;
+      font-weight: bold;
+      min-height: 2.2em;
+      text-align: center;
+      font-size: 1.35em;
+      text-shadow: 2px 2px 12px #ff8a00;
+      transition: color 0.4s;
+    }
+    #result.correct {
+      color: #ffd600;
+    }
+    #result.wrong {
+      color: #ff3c3c;
+    }
+    .gameover {
+      font-size: 2em;
+      animation: gameoverpop 1.3s;
+      color: #ffd600;
+      text-shadow: 2px 2px 18px #e52e71;
+      text-align: center;
+      margin-top: 24px;
+    }
+    @keyframes gameoverpop {
+      0% { transform: scale(0.8); opacity: 0;}
+      60% { transform: scale(1.25);}
+      100% { transform: scale(1); opacity: 1;}
+    }
+    .center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+      margin-bottom: 18px;
+      flex-direction: column;
+    }
+    .game-btn {
+      background: linear-gradient(90deg,#e52e71 0%, #ff8a00 100%);
+      font-size: 1.25em;
+      padding: 13px 42px;
+      font-weight: 700;
+      margin: 20px auto 10px auto;
+      box-shadow: 0 6px 22px rgba(229,46,113,0.18);
+    }
+    .game-btn:active {
+      background: linear-gradient(90deg,#ff8a00 0%, #e52e71 100%);
+    }
