@@ -54,42 +54,159 @@ function binaryUpTo(upTo)
 var bytes = binaryUpTo(255);
 
 $( document ).ready(function() {
-	var random_number, sequence;
-	
-	if(bytes){
-		console.log(bytes);
-		set_values();
-	}
+	// Allow Enter key to submit answer
+	$('input[name="answer"]').on('keydown', function(e) {
+		if (e.key === 'Enter') {
+			$('#submit_answer').click();
+		}
+	});
+	// Track shown values for each bit count
+	var shownValues = {};
+	// Show binary values by default
+	$('.binary_value').show();
+	var hiddenValueCount = 0;
+		var random_number, sequence;
+		var bitCount = 2; // Start with 2 bits
+		var correctAnswers = 0;
+		var maxBits = 8; // Maximum bits allowed
+
+		function createCards() {
+			var container = $('#cards-container');
+			container.empty();
+			for (var i = 0; i < bitCount; i++) {
+				var value = Math.pow(2, bitCount - i - 1);
+				container.append(
+					`<div class="binary_card" data-value="${value}">
+						<div class="card"></div>
+						<div class="binary_value" style="display:block;">${value}</div>
+					</div>`
+				);
+			}
+			// Show all values except those that should be hidden
+			$('.binary_value').show();
+			for (var i = 0; i < hiddenValueCount; i++) {
+				$('.binary_value').eq(bitCount - i - 1).hide();
+			}
+		}
+
+		if(bytes){
+			console.log(bytes);
+			// Initialize shownValues for starting bitCount
+			if (!shownValues[bitCount]) {
+				shownValues[bitCount] = new Set();
+			}
+			createCards();
+			set_values();
+		}
 	// set number function
 	function set_values() {
+	// Always focus the input box after generating new values
+	$('input[name="answer"]').focus();
 		var cards = $('.card');
-		// createa a random number between 1 and the length of possible numbers in the bytes array
-		var size = Object.keys(bytes).length;
-			random_number = Math.floor(Math.random() * (size - 1) + 1)
-		
-		// Get sequence from generated number
-			sequence  = bytes[random_number];
-		var sequenced = sequence.split("");
-		
-		$('.card').each(function(index){
-			// assign number to card
-			// Get the correct digit
-			var binary_digit = sequenced[index];
-			
-			// Add off class to cards with a 0
-			if(sequenced[index] == "0"){
-				$(this).addClass('off');
-			}else{
-				$(this).removeClass('off');
+		var size = Math.pow(2, bitCount);
+		// Initialize shownValues for current bitCount if needed
+		if (!shownValues[bitCount]) {
+			shownValues[bitCount] = new Set();
+		}
+		// Find a value that hasn't been shown yet
+		var possibleValues = [];
+		for (var i = 0; i < size; i++) {
+			if (!shownValues[bitCount].has(i)) {
+				possibleValues.push(i);
 			}
-			// add binary digit to card 
-			$(this).text(binary_digit);
-			
+		}
+		// If all possible values have been shown, move to next bit count
+		if (possibleValues.length === 0 && bitCount < maxBits) {
+			bitCount++;
+			if(hiddenValueCount < bitCount) {
+				hiddenValueCount++;
+			}
+			createCards();
+			// Initialize for new bitCount
+			if (!shownValues[bitCount]) {
+				shownValues[bitCount] = new Set();
+			}
+			// After increasing bitCount, re-run set_values but do not continue with old logic
+			var sizeNew = Math.pow(2, bitCount);
+			var possibleValuesNew = [];
+			for (var i = 0; i < sizeNew; i++) {
+				if (!shownValues[bitCount].has(i)) {
+					possibleValuesNew.push(i);
+				}
+			}
+			random_number = possibleValuesNew[Math.floor(Math.random() * possibleValuesNew.length)];
+			shownValues[bitCount].add(random_number);
+			sequence = bytes[random_number];
+			// If sequence is undefined, set sequenced to all zeros
+			var sequenced;
+			if (typeof sequence === 'undefined' || sequence === undefined) {
+				sequenced = Array(bitCount).fill('0');
+			} else {
+				sequenced = sequence.slice(-bitCount).split("");
+			}
+			// Robust check: If sequence, random_number, or any binary digit is undefined, regenerate values
+			let valid = true;
+			if (typeof sequence === 'undefined' || sequence === undefined) valid = false;
+			if (typeof random_number === 'undefined' || random_number === undefined) valid = false;
+			if (!sequenced || sequenced.length !== bitCount) valid = false;
+			for (let i = 0; i < bitCount; i++) {
+				if (typeof sequenced[i] === 'undefined' || sequenced[i] === undefined) valid = false;
+			}
+			if (!valid) {
+				// If invalid, show all bits as 0
+				$('.binary_card').each(function(index){
+					if(index < bitCount){
+						$(this).show();
+						var card = $(this).find('.card');
+						card.addClass('off');
+						card.text('0');
+					}else{
+						$(this).hide();
+					}
+				});
+				return;
+			}
+			$('.binary_card').each(function(index){
+				if(index < bitCount){
+					$(this).show();
+					var binary_digit = sequenced[index];
+					var card = $(this).find('.card');
+					if(binary_digit == "0"){
+						card.addClass('off');
+					}else{
+						card.removeClass('off');
+					}
+					card.text(binary_digit);
+				}else{
+					$(this).hide();
+				}
+			});
+			return;
+		}
+		// Pick a random value from possibleValues
+		random_number = possibleValues[Math.floor(Math.random() * possibleValues.length)];
+		shownValues[bitCount].add(random_number);
+		sequence = bytes[random_number];
+		var sequenced = sequence.slice(-bitCount).split("");
+		$('.binary_card').each(function(index){
+			if(index < bitCount){
+				$(this).show();
+				var binary_digit = sequenced[index];
+				var card = $(this).find('.card');
+				if(binary_digit == "0"){
+					card.addClass('off');
+				}else{
+					card.removeClass('off');
+				}
+				card.text(binary_digit);
+			}else{
+				$(this).hide();
+			}
 		});
 	}
 	// Timer
-	var seconds = 00; 
-	var tens = 00; 
+	var seconds = 0;
+	var tens = 0;
 	var appendTens = document.getElementById("tens");
 	var appendSeconds = document.getElementById("seconds");
 	var buttonStart = document.getElementById('button-start');
@@ -108,10 +225,10 @@ $( document ).ready(function() {
 
 	buttonReset.onclick = function() {
 		clearInterval(Interval);
-		tens = "00";
-		seconds = "00";
-		appendTens.innerHTML = tens;
-		appendSeconds.innerHTML = seconds;
+	tens = 0;
+	seconds = 0;
+	appendTens.innerHTML = "00";
+	appendSeconds.innerHTML = "00";
 	}
 
   function startTimer () {
@@ -165,41 +282,43 @@ $( document ).ready(function() {
 	});
 	
 	$('#submit_answer').on('click', function(){
+		// Automatically start timer if not running
+		if (!Interval) {
+			clearInterval(Interval);
+			Interval = setInterval(startTimer, 10);
+		}
 		var user_input = $('input').val();
 		$('input').val('');
-		
-		// if the answer is correct
-		if(user_input == random_number){
-			
-			// update the message
+		// Only allow answers within the range for current bitCount
+		var maxValue = Math.pow(2, bitCount) - 1;
+		if(Number(user_input) === random_number && Number(user_input) <= maxValue){
 			$('#message').text("Congratulations! "+sequence+" is equal to "+user_input+"!");
 			$('#message').removeClass();
 			$('#message').addClass('green');
-			
-			// update the win count
-			// get the current count
 			var total = $('#won span').text();
-				// convert to an integer, increment, and reassign
-				total = parseInt(total);
-				total++;
-				$('#won span').text(total);
+			total = parseInt(total);
+			total++;
+			$('#won span').text(total);
+			correctAnswers++;
+			if(correctAnswers % 5 === 0 && bitCount < maxBits){
+				bitCount++;
+				if(hiddenValueCount < bitCount) {
+					hiddenValueCount++;
+				}
+				createCards();
+			}
 		}else{
 			$('#message').text("Sorry... "+sequence+" is not equal to "+user_input+", please try again.");
 			$('#message').removeClass();
 			$('#message').addClass('red');
-			
 			var total = $('#lost span').text();
-				// convert to an integer, increment, and reassign
-				total = parseInt(total);
-				total++;
-				$('#lost span').text(total);
+			total = parseInt(total);
+			total++;
+			$('#lost span').text(total);
 		}
-		
-		// provide new binary number
-		set_values();
-		
-		// Place input field into focus
-		$('input[name="answer"]').focus();
+	set_values();
+	// Focus input box again after answer is processed
+	$('input[name="answer"]').focus();
 			
 	});
 });
