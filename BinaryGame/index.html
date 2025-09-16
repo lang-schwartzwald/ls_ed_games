@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+	<link rel="stylesheet" type="text/css" href="binary.css">
+	<script src="./The binary game_files/jquery-1.10.1.min.js"></script><style>
+.--brisk-axd {
+  filter: blur(4px);
+  user-select: none;
+}
+</style>
+	<script src="./The binary game_files/jquery-migrate-1.2.1.min.js"></script>
+	<script src="binary.js"></script>
+	<title>The binary game</title>	
+</head>
+	<body style="">
+		<section>
+			<header>
+				<h1>The binary number game!</h1>
+			</header>
+			<summary>
+				Using the cards below, provide the correct numeric number for the binary digits below
+			</summary>
+		</section>
+		<section id="scoreboard">
+			<div id="won">
+				Won:
+				<span>0</span>
+			</div>
+			<div id="timer">
+				<button id="button-start">Start</button>
+				<button id="button-stop">Stop</button>
+				<button id="button-reset">Reset</button>
+				<div id="clock">
+					<span id="seconds">00</span>:<span id="tens">00</span>
+				</div>
+				<p>Your computing Power: <span id="bits_per_second">0.000 bits per second</span></p>
+			</div>
+			<div id="lost">Lost:
+				<span>0</span>
+			</div>
+		</section>
+		<section id="binary_cards">
+			<div class="binary_card" data-value="128">
+				<div class="card">1</div>
+				<div class="binary_value">128</div>
+			</div>
+			<div class="binary_card" data-value="64">
+				<div class="card">1</div>
+				<div class="binary_value">64</div>
+			</div>
+			<div class="binary_card" data-value="32">
+				<div class="card">1</div>
+				<div class="binary_value">32</div>
+			</div>
+			<div class="binary_card" data-value="16">
+				<div class="card">1</div>
+				<div class="binary_value">16</div>
+			</div>
+			<div class="binary_card" data-value="8">
+				<div class="card off">0</div>
+				<div class="binary_value">8</div>
+			</div>
+			<div class="binary_card" data-value="4">
+				<div class="card off">0</div>
+				<div class="binary_value">4</div>
+			</div>
+			<div class="binary_card" data-value="2">
+				<div class="card">1</div>
+				<div class="binary_value">2</div>
+			</div>
+			<div class="binary_card" data-value="1">
+				<div class="card off">0</div>
+				<div class="binary_value">1</div>
+			</div>
+			
+		</section>
+		<section id="answers">
+			<p>The above 8 bit byte is equivalent to what digit? </p>
+
+			<input type="number" name="answer">
+			<button id="submit_answer">Submit</button>
+		</section>
+		<section>
+			<button id="toggle_binary_values">Toggle binary values</button>
+			<button id="new_values">New Values</button>
+		<h4 id="message"></h4>
+		</section>
+	
+<!----comment node----></body></html>
