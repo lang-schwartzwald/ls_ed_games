@@ -2,7 +2,7 @@
       { name: "Keyboard", type: "Input", img: "images/keyboard.avif" },
       { name: "Mouse", type: "Input", img: "images/mouse.jpg" },
       { name: "Monitor", type: "Output", img: "images/monitor.jpg" },
-      { name: "CPU", type: "Process", img: "images/ram.JPG" },
+      { name: "CPU", type: "Process", img: "images/cpu.JPG" },
       { name: "Printer", type: "Output", img: "images/printer.jpg" },
       { name: "Hard Drive", type: "Storage", img: "images/harddrive.jpg" },
       { name: "RAM", type: "Storage", img: "images/ram.jpg" },
