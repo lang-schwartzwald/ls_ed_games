@@ -187,7 +187,33 @@ $( document ).ready(function() {
 		random_number = possibleValues[Math.floor(Math.random() * possibleValues.length)];
 		shownValues[bitCount].add(random_number);
 		sequence = bytes[random_number];
-		var sequenced = sequence.slice(-bitCount).split("");
+		var sequenced;
+		if (typeof sequence === 'undefined' || sequence === undefined) {
+			sequenced = Array(bitCount).fill('0');
+		} else {
+			sequenced = sequence.slice(-bitCount).split("");
+		}
+		let valid2 = true;
+		if (typeof sequence === 'undefined' || sequence === undefined) valid2 = false;
+		if (typeof random_number === 'undefined' || random_number === undefined) valid2 = false;
+		if (!sequenced || sequenced.length !== bitCount) valid2 = false;
+		for (let i = 0; i < bitCount; i++) {
+			if (typeof sequenced[i] === 'undefined' || sequenced[i] === undefined) valid2 = false;
+		}
+		if (!valid2) {
+			// If invalid, show all bits as 0
+			$('.binary_card').each(function(index){
+				if(index < bitCount){
+					$(this).show();
+					var card = $(this).find('.card');
+					card.addClass('off');
+					card.text('0');
+				}else{
+					$(this).hide();
+				}
+			});
+			return;
+		}
 		$('.binary_card').each(function(index){
 			if(index < bitCount){
 				$(this).show();
